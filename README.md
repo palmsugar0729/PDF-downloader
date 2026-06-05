@@ -13,20 +13,34 @@
 
 ## 快速开始
 
+### 方式一：双击运行（推荐 Windows 用户）
+
+直接双击根目录的 **`run.bat`**，按提示输入即可。
+
+### 方式二：命令行运行
+
 ```bash
 # 1. 安装依赖
 cd codes
 pip install -r requirements.txt
 
 # 2. 运行（确保 Chrome 已安装）
-# 方式一：交互模式（直接运行，按提示输入 URL 和保存路径）
+# 交互模式（直接运行，按提示输入 URL 和保存路径）
 python main.py
 
-# 方式二：参数模式（适合脚本调用）
+# 参数模式（适合脚本调用）
 python main.py "https://mikiotaniguchi.com/main/sm/smmain.htm" -o ./downloads
 python main.py "https://mikiotaniguchi.com/main/sm/smmain.htm" -o ./downloads --delay-min 2 --delay-max 5
 python main.py "https://mikiotaniguchi.com/main/sm/smmain.htm" --no-headless  # 显示浏览器窗口
 ```
+
+### 交互流程
+
+1. 提示输入目标网页 URL（有默认值，直接回车即可）
+2. 提示输入 PDF 保存目录（有默认值）
+3. 开始下载，显示实时日志
+4. 下载完成后询问：`是否继续下载其他页面？(y/n)`
+5. 回答 `y` → 重新开始；回答 `n` → 退出程序
 
 ## 命令行参数
 
@@ -56,19 +70,36 @@ python main.py "https://mikiotaniguchi.com/main/sm/smmain.htm" --no-headless  # 
 
 ```
 ├── codes/              # 所有源代码
-│   ├── main.py         # CLI 入口
+│   ├── main.py         # CLI 入口（交互式 + 循环下载）
 │   ├── downloader.py   # Selenium 爬取 + PDF 下载
 │   ├── parser.py       # 标题解析 + 命名生成
 │   └── requirements.txt
 ├── docs/               # 产品文档 & 需求 & 开发日志
+│   ├── PRD_1.0.md      # 已封存的产品需求（第一期）
+│   ├── PRD_2.0.md      # 下期产品需求（规划中）
+│   ├── needs_1.0.md    # 已封存的需求文档（第一期）
+│   ├── needs_2.0.md    # 下期需求文档（规划中）
+│   └── 2026-06-05_开发日志.md
 ├── assets/             # 设计素材 & 截图
 │   ├── bug/            # 测试 bug 截图
 │   ├── design/
 │   └── reference/      # 参考图、灵感收集
 ├── notes/              # 学习笔记
+├── run.bat             # Windows 一键运行脚本
 ├── AGENTS.md           # AI 开发指南
 └── README.md           # 本文件
 ```
+
+## 文档索引
+
+| 文档 | 说明 |
+|------|------|
+| [AGENTS.md](AGENTS.md) | AI/开发者指南，含技术决策和代码规则 |
+| [docs/PRD_1.0.md](docs/PRD_1.0.md) | 第一期产品需求文档（已封存） |
+| [docs/PRD_2.0.md](docs/PRD_2.0.md) | 第二期产品需求文档（规划中） |
+| [docs/needs_1.0.md](docs/needs_1.0.md) | 第一期需求文档（已封存） |
+| [docs/needs_2.0.md](docs/needs_2.0.md) | 第二期需求文档（规划中） |
+| [docs/2026-06-05_开发日志.md](docs/2026-06-05_开发日志.md) | 第一期完整开发记录 |
 
 ## 许可
 

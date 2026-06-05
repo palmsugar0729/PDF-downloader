@@ -117,11 +117,16 @@ def parse_args():
     return parser.parse_args()
 
 
-def main():
-    """主入口"""
-    args = parse_args()
+def run_single(args) -> dict:
+    """
+    执行单次下载流程。
 
-    setup_logging(verbose=args.verbose)
+    Args:
+        args: argparse 解析结果
+
+    Returns:
+        dict: 下载统计
+    """
     logger = logging.getLogger(__name__)
 
     # 如果命令行没有传 url，进入交互模式
@@ -148,23 +153,72 @@ def main():
     try:
         stats = downloader.run(url)
 
-        # 根据结果设置退出码
+        # 根据结果输出总结提示
         if stats["failed"] > 0:
-            sys.exit(1)
+            logger.warning("本次下载有 %d 个文件失败", stats["failed"])
         elif stats["downloaded"] == 0 and stats["total_groups"] == 0:
             logger.warning("未找到任何可下载的 PDF")
-            sys.exit(2)
-        else:
-            sys.exit(0)
+
+        return stats
 
     except KeyboardInterrupt:
         logger.info("用户中断，正在清理...")
         downloader.cleanup()
-        sys.exit(130)
+        raise
     except Exception as e:
         logger.exception("未预期的错误: %s", e)
         downloader.cleanup()
-        sys.exit(1)
+        raise
+
+
+def prompt_continue() -> bool:
+    """询问用户是否继续下载"""
+    print()
+    print("=" * 60)
+    while True:
+        choice = input("是否继续下载其他页面？(y/n): ").strip().lower()
+        if choice in ("y", "yes", "是"):
+            return True
+        elif choice in ("n", "no", "否"):
+            return False
+        else:
+            print("请输入 y 或 n")
+
+
+def main():
+    """主入口 — 支持循环下载"""
+    args = parse_args()
+    setup_logging(verbose=args.verbose)
+    logger = logging.getLogger(__name__)
+
+    first_run = True
+
+    while True:
+        try:
+            # 非首次运行时，重置 args 以触发交互式输入
+            if not first_run:
+                args.url = None
+                args.output = DEFAULT_OUTPUT
+
+            stats = run_single(args)
+            first_run = False
+
+        except KeyboardInterrupt:
+            logger.info("程序被用户中断")
+            sys.exit(130)
+        except SystemExit:
+            # run_single 中不会调用 sys.exit，但保留处理
+            raise
+        except Exception:
+            # 出错后询问是否继续，而不是直接退出
+            first_run = False
+
+        # 询问是否继续
+        if not prompt_continue():
+            print()
+            print("感谢使用，再见！")
+            print("=" * 60)
+            break
 
 
 if __name__ == "__main__":
