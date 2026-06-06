@@ -100,6 +100,8 @@ python main.py "https://mikiotaniguchi.com/main/sm/smmain.htm" --no-headless  # 
 | [docs/needs_1.0.md](docs/needs_1.0.md) | 第一期需求文档（已封存） |
 | [docs/needs_2.0.md](docs/needs_2.0.md) | 第二期需求文档（规划中） |
 | [docs/2026-06-05_开发日志.md](docs/2026-06-05_开发日志.md) | 第一期完整开发记录 |
+| [docs/2026-06-06_开发日志.md](docs/2026-06-06_开发日志.md) | chromedriver 锁超时/下载卡顿修复记录 |
+| [docs/踩坑记录.md](docs/踩坑记录.md) | 已知踩坑点汇总与解决方案速查 |
 
 ## 许可
 

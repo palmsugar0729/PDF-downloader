@@ -27,8 +27,6 @@ from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from webdriver_manager.chrome import ChromeDriverManager
-
 from parser import parse_title, generate_save_path
 
 logger = logging.getLogger(__name__)
@@ -101,7 +99,13 @@ class PDFDownloader:
         }
         options.add_experimental_option("prefs", prefs)
 
-        service = Service(ChromeDriverManager().install())
+        # 使用本地固定的 chromedriver，避免网络下载和锁文件问题
+        driver_path = os.path.join(
+            os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
+            "chromedriver-win64",
+            "chromedriver.exe",
+        )
+        service = Service(driver_path)
         self.driver = webdriver.Chrome(service=service, options=options)
         logger.info("Chrome WebDriver 初始化完成")
 
